@@ -1,0 +1,180 @@
+@charset "utf-8";
+/*
+Theme Name: ZBS
+Theme URI: 
+Description: 最毕设响应式交互主题
+Author: Zzzz
+Author URI: 
+Version: 1.0
+Tags: responsive, white, bootstrap
+License: Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)
+License URI: http://creativecommons.org/licenses/by-sa/3.0/
+*/
+//@import url('bootstrap/css/bootstrap.min.css');
+@import url('font-awesome/css/font-awesome.min.css');
+$sketchWidth: 962px;
+$sketchHeight: 602px;
+$navigation_bar_height : 50px;
+$postInfoWith: 850px;
+$themeMajorCol : #3868ae;
+$Red : #D9534F;
+$font-family : "Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",微软雅黑,Arial,Verdana,arial,serif;
+
+@mixin showBoxBorder(){
+	//outline:1px solid red;
+	//outline-offset:0;
+}
+
+@mixin borderRadius($rad: 10px){
+	border-radius: $rad;
+	-moz-border-radius: $rad;
+	-webkit-border-radius: $rad;
+}
+
+@mixin boxShadow($args: 1px 1px 3px gray){
+	-webkit-box-shadow: $args;
+	-moz-box-shadow: $args;
+	box-shadow: $args;
+}
+
+@mixin postInfo(){
+	max-width: $postInfoWith;
+	padding: 0 20px;
+	@include showBoxBorder();
+}
+
+@mixin box-sizing($type: inherit){
+	box-sizing:$type;
+	-moz-box-sizing:$type;
+	-webkit-box-sizing:$type;
+}
+
+@mixin icon(){
+	font-family: FontAwesome;
+	margin-right: 5px;
+	color: #555;
+}
+
+
+body {
+	 padding-top: 0;
+	 padding-bottom: 0;
+	 font-family: $font-family;
+	 margin: 0;
+ }
+ 
+ table{
+	border-spacing: 0;
+	border-radius: 5px;
+}
+
+button{
+	font-family: $font-family;
+	height: 25px;
+	padding: 2px 10px;
+	background-color: rgba(255,255,255,0.7);
+	color : $themeMajorCol;
+	border: 1px solid transparent;
+	margin : 5px 3px;
+	@include borderRadius(3px);
+
+	&:hover{
+		border:1px $themeMajorCol solid;
+		cursor: pointer;
+	}
+}
+
+input{
+	@include box-sizing(border-box);
+	background-color: #eee;
+	height: 24px;
+	border:1px #ccc solid;
+	padding: 2px 10px;
+	margin: 3px 5px;
+	outline: none;
+	@include borderRadius(3px);
+	&:hover{
+		border-color:$themeMajorCol;
+	}
+	&:focus{
+		border-color:$themeMajorCol;
+	}
+}
+
+#navigation_bar{
+	width:100%;
+	height:$navigation_bar_height;
+	position: fixed;
+	top:0;
+	left:0;
+	z-index:9999;
+	border-bottom: solid #bbb 1px;
+	background-color: white;
+	@include showBoxBorder();
+	#logo{
+		width:auto;
+		height:$navigation_bar_height;
+		position:fixed;
+		left:30px;
+		top:0;
+		@include showBoxBorder();
+	}
+	#rightCtrlBar{
+		float: right;
+		height: 50px;
+		margin: 0 20px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		input{
+			@include borderRadius(12px);
+		}
+		#searchSubmit{
+			border:none;
+			background: none;
+			&:before{
+				color: #bbb;
+				font-family: FontAwesome;
+				content: "\f002";
+			}
+		}
+	}
+}
+
+#postContent{       //文章正文
+	font-size: 1em;
+	line-height: 1.5em;
+	border:1px #ccc solid;
+	white-space: normal;
+	@include postInfo();
+	padding: 30px 20px;
+	margin: 10px auto;
+	@include boxShadow(1px 1px 5px #ddd);
+	img{
+		max-width: 100%;
+		height: auto;
+		margin: 30px 0;
+	}
+	#postMeta{
+		text-align: right;
+		padding: 0 0 10px 0;
+		border-bottom: 1px gray dashed;
+	}
+}
+
+#primary{
+	margin-top: 60px;
+}
+
+#loading{
+	font-size: 2em;
+	color: gray;
+	text-align: center;
+	z-index: 9999;
+	position: absolute;
+	top: calc(50% - 50px);
+	left: calc(50% - 50px);
+	i{
+		font-size: 2em;
+	}
+}

@@ -1,0 +1,35 @@
+{
+  "name": "infinite",
+  "version": "1.0.0",
+  "description": "最毕设交互首页",
+  "main": "sketch.js",
+  "scripts": {
+    "test": "webpack",
+    "test-min": "webpack -p",
+    "release": "webpack --config webpack.release.js -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZzzzS/wordpress-theme-zbs.git"
+  },
+  "author": "Zzzz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZzzzS/wordpress-theme-zbs/issues"
+  },
+  "homepage": "https://github.com/ZzzzS/wordpress-theme-zbs#readme",
+  "devDependencies": {
+    "css-loader": "^0.23.1",
+    "node-sass": "^3.7.0",
+    "sass-loader": "^3.2.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.0",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "extract-text-webpack-plugin": "^1.0.1"
+  },
+  "comment": {
+    "test-min": "webpack --config webpack.min.js  //这是注释，备份"
+  }
+}

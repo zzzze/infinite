@@ -1,0 +1,368 @@
+$buttonSize : 30px;
+$iconSize: 16px;
+$themeMajorCol : #3868ae;
+$navigation_bar_height : 50px;
+$font-family : "Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",微软雅黑,Arial,Verdana,arial,serif;
+$Red : #D9534F;
+$filterBarBtnWidth: 100px;
+$postInfoWith: 850px;
+
+@mixin showBoxBorder(){
+	//outline:1px solid red;
+	//outline-offset:0;
+}
+
+@mixin icon(){
+	font-family: FontAwesome;
+	margin-right: 5px;
+	color: #555;
+}
+
+@mixin borderRadius($rad: 10px){
+	border-radius: $rad;
+	-moz-border-radius: $rad;
+	-webkit-border-radius: $rad;
+}
+
+@mixin postInfo(){
+	max-width: $postInfoWith;
+	padding: 0 20px;
+	@include showBoxBorder();
+}
+ 
+ #sketch{
+   margin: 0;
+   padding: 0;
+   position: absolute;
+   top:50px;
+   z-index: -1;
+ }
+ 
+ .postMeta{            //文章信息
+	display:inline-block;
+	font-size: 0.9em;
+	margin-right: 20px;
+	margin-top: 5px;
+	color: gray;
+	@include showBoxBorder();
+	&[title=author]:before{
+		content: "\f007";
+		@include icon();
+	}
+	&[title=productType]:before{
+		content: "\f02e";
+		@include icon();
+	}
+	&[title=major]:before{
+		content: "\f19d";
+		@include icon();
+	}
+	&[title=creationDate]:before{
+		content: "\f073";
+		@include icon();
+	}
+	&[title=unit]:before{
+		content: "\f0f7";
+		@include icon();
+	}
+	&[title=profession]:before{
+		content: "\f0b1";
+		@include icon();
+	}
+}
+
+#filterBar{
+	position: absolute;
+	width: 100%;
+	top: $navigation_bar_height;
+	left: 0;
+	#filter{
+		display: none;
+		#filterT{
+			background: rgba(255,255,255,0.5);
+			border: 1px gray solid;
+			@include borderRadius(0 0 10px 10px);
+			margin: 0 auto;
+			tr{
+				&:nth-last-child(2){
+					th{
+						border-bottom: none;
+					}
+				}
+			}
+			th{
+				border-right: none;
+				background-color: #ccc;
+				color: $themeMajorCol;
+				padding: 10px 10px;
+				border-right: 1px gray solid;
+				font-size: 16px;
+				border-bottom: 1px gray dashed;
+			}
+			td{
+				text-align: center;
+				padding: 0;
+				
+				
+				#getPosts{
+					margin: 10px 20px;
+					height: 30px;
+					 &:before{
+						 font-size: 20px;
+						 font-family: FontAwesome;
+						 color:gray;
+						 content: "\f0f6";
+					 }
+				}
+
+				#getUsers{
+					@extend #getPosts;
+					 &:before{
+						 content: "\f0c0";
+					 }
+					 &:hover{
+						 cursor:not-allowed;
+					 }
+				 }
+
+				#align{
+					@extend #getPosts;
+					&:before{
+						content: "\f00a";
+					}
+				}
+
+				.cancel{
+					&:before{
+						font-family: FontAwesome;
+						color:#ccc;
+						content: "\f00d";
+					}
+					width : 20px;
+					height : 100%;
+					padding:0;
+					margin: 0;
+					border-width: 0;
+					@include borderRadius(0px);
+					background-color: #ccc;
+					outline:none;
+					&:hover{
+						border: none;
+						cursor: default;
+					}
+				}
+
+				.cancelActive {
+					background-color: $Red;
+					&:before {
+						color: white;
+					}
+					&:hover{
+						border: 1px gray solid;
+						cursor: pointer;
+					}
+				}
+			}
+			.cancelCell{
+				border-left: 1px gray solid;
+			}
+			.active{
+				background-color: $themeMajorCol;
+				border:1px $themeMajorCol solid;
+				color: white;
+			}
+		}
+		#btnGroup{
+			border-top: 1px solid gray;
+			width: 100%;
+			display: -webkit-flex; /* Safari */
+			display: flex;
+			justify-content:center;
+			flex-direction: row;
+			flex-wrap: nowrap;
+		}
+	}
+
+	#filterBarBtn{
+		display: block;
+		width: $filterBarBtnWidth;
+		border-width: 0;
+		background: #bbb;
+		height: 15px;
+		padding: 0;
+		outline: none;
+		@include borderRadius(0 0 5px 5px);
+		margin :0 auto;
+		&:before{
+			position: relative;
+			display:block;
+			bottom: 7px;
+			height:0;
+			color: white;
+			font-family: FontAwesome;
+			content: "\f078";
+		}
+		&:hover{
+			&:before{
+				color: $themeMajorCol;
+			}
+			cursor: pointer;
+		}
+	}
+}
+
+#infoFrame{
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width:100%;
+	height: 101px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	@include showBoxBorder();
+	border-top: solid gray 1px;
+	background-color: white;
+
+	#introduction{
+		@include postInfo();
+		margin: 0 auto;
+		height: 100px;
+		padding-left: 20px;
+		padding-right: 20px;
+		img{
+			width: 80px;
+			margin: 10px 20px;
+			float: left;
+			@include borderRadius();
+			@include showBoxBorder();
+		}
+		#postList{
+			float: right;
+			max-width: 250px;
+			height: 90px;
+			margin: 5px 0;
+			padding: 0 0 0 10px;
+			overflow-y: auto;
+			border-left: 1px gray dashed;
+			&:before{
+				content: '作品：';
+			}
+			//@include box-sizing(border-box);
+		}
+
+		.postList{
+			color: gray;
+			font-size: 10px;
+			white-space:nowrap;
+			text-overflow:ellipsis;
+			overflow-x: hidden;
+			margin: 5px 0;
+			&:hover{
+				cursor: pointer;
+				color: $themeMajorCol;
+			}
+			&:before{
+				font-family: FontAwesome;
+				content: "\f10c";
+				margin-right: 5px;
+			}
+		}
+
+		#infoContainer{
+			@include showBoxBorder();
+			height:100px;
+			white-space:nowrap;
+			#title{
+				padding: 1px 0;
+				@include showBoxBorder();
+			}
+			#name{
+				padding: 1px 0;
+				@include showBoxBorder();
+			}
+
+			.title_link{
+				&:hover{
+					cursor: pointer;
+					color:$themeMajorCol;
+				}
+			}
+
+		}
+	}
+}
+
+#postContent_delete{
+	&:before{
+		@include icon();
+		color: white;
+		content: "\f00d";
+		//line-height: $iconSize;
+		text-align: center;
+		//@include showBoxBorder();
+	}
+	//position:absolute;
+	border: solid 1px $Red;
+	background-color: $Red;
+	margin-left: 10px;
+	width:$buttonSize;
+	height:$buttonSize;
+	flex-shrink: 0;
+	padding: 0 0 3px 5px;
+	@include borderRadius(50%);
+	//@include showBoxBorder();
+}
+
+#toTop{
+	@extend #postContent_delete;
+	background-color: white;
+	border: solid 1px gray;
+	&:before{
+		content: "\f077";
+		color: gray;
+	}
+	right:90px;
+	display:none;
+}
+
+#sortInfoFrame{
+	background:rgba(230,230,230,0.5);
+	text-align: center;
+	position:absolute;
+	padding:15px;
+	@include borderRadius(5px);
+}
+
+#nextPage{
+	position: absolute;
+	display: none;
+	background-color: rgba(150,150,150,0.5);
+	@include borderRadius(3px);
+	border: none;
+	padding-right: 2px;
+	width: 30px;
+	height: 30px;
+	right: 100px;
+	bottom: 200px;
+	&:before{
+		content: "\f078";
+		@include icon();
+		color: white;
+	}
+	&:hover{
+		&:before{
+			color: $themeMajorCol;
+		}
+		//border: 1px solid $themeMajorCol;
+
+	}
+}
+
+#perPage{
+	@extend #nextPage;
+	bottom: 280px;
+	&:before{
+		content: "\f077";
+
+	}
+}

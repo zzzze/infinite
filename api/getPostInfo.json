@@ -1,0 +1,28 @@
+[
+    {
+        "author": "张伟",
+        "creationDate": "2016",
+        "major": "建筑",
+        "subMajor": "建筑设计",
+        "productType": "毕业设计",
+        "title": "标题",
+        "link": "#",
+        "id": "1",
+        "thumbnail": "/images/65.jpg",
+        "cat": "情感表达",
+        "color": "#435498"
+    },
+    {
+        "author": "李四",
+        "creationDate": "2016",
+        "major": "视觉传达",
+        "subMajor": "平面设计",
+        "productType": "毕业设计",
+        "title": "标题",
+        "link": "#",
+        "id": "2",
+        "thumbnail": "/images/65.jpg",
+        "cat": "功能优化",
+        "color": "#435498"
+    }
+]
