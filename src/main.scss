@@ -103,10 +103,13 @@ $postInfoWith: 850px;
 				text-align: center;
 				padding: 0;
 				
-				
-				#getPosts{
+				input{
 					margin: 10px 20px;
 					height: 30px;
+				}
+				
+				#getPosts{
+					@extend input;
 					 &:before{
 						 font-size: 20px;
 						 font-family: FontAwesome;
@@ -222,74 +225,83 @@ $postInfoWith: 850px;
 	@include showBoxBorder();
 	border-top: solid gray 1px;
 	background-color: white;
-
-	#introduction{
-		@include postInfo();
-		margin: 0 auto;
-		height: 100px;
-		padding-left: 20px;
-		padding-right: 20px;
-		img{
-			width: 80px;
-			margin: 10px 20px;
-			float: left;
-			@include borderRadius();
-			@include showBoxBorder();
-		}
-		#postList{
-			float: right;
-			max-width: 250px;
-			height: 90px;
-			margin: 5px 0;
-			padding: 0 0 0 10px;
-			overflow-y: auto;
-			border-left: 1px gray dashed;
-			&:before{
-				content: '作品：';
-			}
-			//@include box-sizing(border-box);
-		}
-
-		.postList{
-			color: gray;
-			font-size: 10px;
-			white-space:nowrap;
-			text-overflow:ellipsis;
-			overflow-x: hidden;
-			margin: 5px 0;
-			&:hover{
-				cursor: pointer;
-				color: $themeMajorCol;
-			}
-			&:before{
-				font-family: FontAwesome;
-				content: "\f10c";
-				margin-right: 5px;
-			}
-		}
-
-		#infoContainer{
-			@include showBoxBorder();
-			height:100px;
-			white-space:nowrap;
-			#title{
-				padding: 1px 0;
+	
+	#infoBody{
+		position: absolute;
+		max-width: $postInfoWith;
+		width: 100%;
+		top: 0;
+		left: 200px;
+		#introduction{
+			@include postInfo();
+			margin: 0 auto;
+			height: 100px;
+			padding-left: 20px;
+			padding-right: 20px;
+			img{
+				width: 80px;
+				margin: 10px 20px;
+				float: left;
+				@include borderRadius();
 				@include showBoxBorder();
 			}
-			#name{
-				padding: 1px 0;
-				@include showBoxBorder();
+			#postList{
+				float: right;
+				max-width: 250px;
+				height: 90px;
+				margin: 5px 0;
+				padding: 0 0 0 10px;
+				overflow-y: auto;
+				border-left: 1px gray dashed;
+				&:before{
+					content: '作品：';
+				}
+				//@include box-sizing(border-box);
 			}
 
-			.title_link{
+			.postList{
+				color: gray;
+				font-size: 10px;
+				white-space:nowrap;
+				text-overflow:ellipsis;
+				overflow-x: hidden;
+				margin: 5px 0;
 				&:hover{
 					cursor: pointer;
-					color:$themeMajorCol;
+					color: $themeMajorCol;
+				}
+				&:before{
+					font-family: FontAwesome;
+					content: "\f10c";
+					margin-right: 5px;
 				}
 			}
 
+			#infoContainer{
+				@include showBoxBorder();
+				height:100px;
+				white-space:nowrap;
+				#title{
+					padding: 1px 0;
+					@include showBoxBorder();
+				}
+				#name{
+					padding: 1px 0;
+					@include showBoxBorder();
+				}
+
+				.title_link{
+					&:hover{
+						cursor: pointer;
+						color:$themeMajorCol;
+					}
+				}
+
+			}
 		}
 	}
+
+	
 }
 
 #postContent_delete{

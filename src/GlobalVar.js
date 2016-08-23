@@ -23,6 +23,7 @@ var GlobalVar = {
         y : 0,
         totalPage : 0
     },
+    scrollDis : 400,
     navigationBarHeight : 50,
     width : 0,
     height : 0

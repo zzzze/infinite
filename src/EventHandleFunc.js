@@ -1,12 +1,19 @@
 /**
  * 定义与Button绑定的事件处理程序
  */
-var util = require("./util.js");
 var globalVar = require("./GlobalVar.js");
 var getPostContent = require("./getPostContent.js");
 
 var eventHandleFunc = {
     clicked_animation : function (event){
+        function linePts(){
+            event.target.pts = [];
+            event.target.pts.push(new p5.Vector(event.target.position.x, event.target.position.y + event.target.width / 2));
+            event.target.pts.push(new p5.Vector(event.target.position.x, event.target.position.y + event.target.width / 2));
+            for (i = 2; i <= count; i++){
+                event.target.pts.push(new p5.Vector(event.target.position.x, event.target.position.y + event.target.width / 2 + (i - 1) * distance));
+            }
+        }
         event.target.p.noStroke();
         event.target.p.fill(0);
         event.target.p.textAlign("center");
@@ -35,12 +42,52 @@ var eventHandleFunc = {
             event.target.p.ellipse(event.target.position.x, event.target.position.y, event.target.height + Math.sqrt((n - 60 * i) * 10, 2), event.target.height + Math.sqrt((n - 60 * i) * 10, 2));
         }
         
+        //画线
         event.target.p.stroke('gray');
-        event.target.p.strokeWeight(1);
+        event.target.p.strokeWeight(0.8);
         if(event.target.clickTimeline < 100){
-            event.target.p.line(event.target.position.x, event.target.position.y + event.target.width / 2, event.target.position.x, Math.max(event.target.position.y + 15 * event.target.clickTimeline, event.target.position.y + event.target.width / 2));
+            event.target.p.line(event.target.position.x, event.target.position.y + event.target.width / 2, event.target.position.x, event.target.position.y + event.target.width / 2 
+                                + event.target.p.height * event.target.clickTimeline / 100 + globalVar.translate.currentPage * globalVar.scrollDis);
+            var distance = 50;
+            var count = Math.ceil((event.target.position.y + event.target.width / 2 + event.target.p.height + (globalVar.transTarget.totalPage - globalVar.translate.currentPage - 1) * globalVar.scrollDis) / distance);
+            if (event.target.clickTimeline === 0){
+                linePts();
+            }
         }else{
-            event.target.p.line(event.target.position.x, event.target.position.y + event.target.width / 2, event.target.position.x, event.target.position.y + 1500);
+            // event.target.p.line(event.target.position.x, event.target.position.y + event.target.width / 2, event.target.position.x, event.target.position.y + 1500);
+            event.target.p.noFill();
+            // event.target.p.stroke("red");
+            var distance = 50;
+            var count = Math.ceil((event.target.position.y + event.target.width / 2 + event.target.p.height + (globalVar.transTarget.totalPage - globalVar.translate.currentPage - 1) * globalVar.scrollDis) / distance);
+            if (count !== event.target.pts.lenght){
+                linePts();
+            }
+            mouseX = event.target.mouseX;
+            mouseY = event.target.mouseY;
+            event.target.p.beginShape();
+            var pt,mouseX,mouseY;
+            for (i = 0; i < count; i++){
+                pt = event.target.pts[i];
+                
+                if (i > 1){
+                    var dis = Math.sqrt(Math.pow(pt.x - mouseX, 2) + Math.pow(pt.y - mouseY, 2)),
+                        vect = new p5.Vector(mouseX - pt.x, mouseY - pt.y);
+                    
+                    dis = event.target.p.map(dis, 0, 1300, 0, 100);
+                    dis = 100 / event.target.p.constrain(dis,1,100);
+                    vect.normalize();
+                    vect.mult(-dis);
+                    
+                    event.target.p.curveVertex(pt.x + vect.x, pt.y );
+                    // event.target.p.ellipse(pt.x + vect.x, pt.y ,10,10);
+                }else{
+                    event.target.p.curveVertex(pt.x, pt.y);
+                    // event.target.p.ellipse(pt.x,pt.y,10,10);
+                }
+                
+                // event.target.p.ellipse(mouseX,mouseY,10,10);
+            }
+            event.target.p.endShape();
         }
     },
 
@@ -77,7 +124,6 @@ var eventHandleFunc = {
 
     showShortPostInfo : function (event){
         if(event.target.pState !== "hover"){
-            // var sketch = document.getElementById("sketch");
             var top = Math.floor(event.target.position.y + globalVar.navigationBarHeight + event.target.constructor.prototype.trans[event.target.constructor.prototype.trans.length - 1].y);
             var left = Math.floor(event.target.position.x + event.target.constructor.prototype.trans[event.target.constructor.prototype.trans.length - 1].x);
                
@@ -118,7 +164,6 @@ var eventHandleFunc = {
 
     showUserInfo : function (event){
         var doc = document;
-        var sketch = document.getElementById("sketch");
 
         var infoFrame = document.getElementById("infoFrame");
         if(infoFrame){
@@ -217,7 +262,11 @@ var eventHandleFunc = {
             infoFrame = doc.createElement("div");
             infoFrame.id = "infoFrame";
         }
-
+        
+        var infoBody = doc.createElement("div");
+        infoBody.id = "infoBody";
+        
+        
         var introduction = doc.createElement("div");
         introduction.id = "introduction";
 
@@ -273,13 +322,21 @@ var eventHandleFunc = {
 
         introduction.appendChild(thumbnail);
         introduction.appendChild(infoContainer);
-
-        infoFrame.appendChild(introduction);
-        infoFrame.appendChild(postContent);
+        
+        infoBody.appendChild(introduction);
+        infoBody.appendChild(postContent);
+        
+        infoFrame.appendChild(infoBody);
         doc.body.appendChild(infoFrame);
+           
+        //设置infoBody的位置。。。
 
         $("#infoFrame").css("display", "none");
         $("#infoFrame").fadeIn();
+        
+        //这一句不能放在上两句前面,因为fadeIn执行之前,element的weith为0
+        infoBody.style.left = ((doc.documentElement.clientWidth - parseInt($("#introduction").css("width")) - parseInt($("#introduction").css("padding-left")) * 2) / 2) + "px";
+
     },
 
     hideInfoFrame : function (event){
@@ -288,7 +345,6 @@ var eventHandleFunc = {
         if (event.target.constructor.prototype.clickObjCount <= 1){
             $("#infoFrame").fadeOut("fast",function (){infoFrame.style.visibility = "hidden";});
         }
-        
     }
 
 };

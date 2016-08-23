@@ -23,8 +23,6 @@ var getInfo = function (type,arg){
 				
 				for(var item in posts){
 					var size = Math.random()*20 + 15;
-					var width = Math.max(document.documentElement.clientWidth ,960);
-					var height = Math.max(document.documentElement.clientHeight ,600);
 					var options = {
 						position : new p5.Vector((Math.random() * globalVar.width - 100) + 50,(Math.random() * globalVar.height - 60) + 30),
 						width : size,
@@ -53,12 +51,13 @@ var getInfo = function (type,arg){
 					newObj.visualObject.buttonCol = newObj.visualObject.info["color"] || newObj.visualObject.p.color(Math.random() * 255, Math.random() * 255, Math.random() * 255);
 					globalVar.displayArray.ButtonParticle.push(newObj);
 				}
-
+				var totalHeight =  globalVar.displayArray.ButtonParticle.length / globalVar.countPerRow * globalVar.cellSize;
+				globalVar.transTarget.totalPage = Math.ceil(totalHeight / globalVar.pp.height);
 			}else{
 				$("#loading").fadeIn();
 			}
 		};
-		XMLHTTP.open("GET","/api/getPostInfo.json");
+		XMLHTTP.open("GET","api/getPostInfo.json");
 		XMLHTTP.send();
 	}else{
 		if(type === "users"){
@@ -107,11 +106,13 @@ var getInfo = function (type,arg){
 					}
 					i = null;
 					count = null;
+					var totalHeight =  globalVar.displayArray.ButtonParticle.length / globalVar.countPerRow * globalVar.cellSize;
+					globalVar.transTarget.totalPage = Math.ceil(totalHeight / globalVar.pp.height);
 				}else{
 					$("#loading").fadeIn();
 				}
 			}
-			XMLHTTP.open("GET","/infinite/getUserInfo.php" + "?userRole=" + arg);
+			XMLHTTP.open("GET","api/getUserInfo.json" + "?userRole=" + arg);
 			XMLHTTP.send();
 		}
 	}

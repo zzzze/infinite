@@ -12,10 +12,12 @@ var sketch = function (p){
 	globalVar.width = Math.max(document.documentElement.clientWidth,960);
 	globalVar.height = Math.max(document.documentElement.clientHeight,600);
 	globalVar.pp = p;
+	var nextPage,
+		perPage;
 	p.preload = function () {
 		try{
 			p.soundFormats('wav', 'ogg');
-			globalVar.SOUNDFILE = p.loadSound('/sound/water2.wav');
+			globalVar.SOUNDFILE = p.loadSound('sound/water2.wav');
 		}catch(e){
 			console.log(e.message);      //貌似ie不支持soundformats方法
 		}
@@ -35,11 +37,15 @@ var sketch = function (p){
 		};
 		globalVar.attractPtL = new AttractPoint(optionL);
 		globalVar.attractPtR = new AttractPoint(optionR);
+		
+		nextPage = $("#nextPage");
+		perPage = $("#perPage");
 
 	};
 	p.setup = function (){
 		p.createCanvas(globalVar.width, globalVar.height);
-		p.canvas.id = "sketch_1";
+		p.canvas.id = "infinite";
+		p.canvas.innerHTML = "您的浏览器不支持Canvas标签！"
 		globalVar.displayArray.backgroundBall = [];
 		for(var i = 0; i < 100; i++){
 			var size = Math.random()*20 + 15;
@@ -60,30 +66,28 @@ var sketch = function (p){
 
 	p.draw = function (){
 		p.background(255);
-		// console.log(ButtonPlus.prototype.clickObjCount);
+		// globalVar.transTarget.totalPage = 3;
 		// globalVar.attractPtL.display();
 		// globalVar.attractPtR.display();
+		if (globalVar.alignState && globalVar.translate.currentPage < globalVar.transTarget.totalPage - 1){
+			nextPage.fadeIn();
+		}else{
+			nextPage.fadeOut();
+		}
+		if (globalVar.alignState && globalVar.translate.currentPage > 0){
+			perPage.fadeIn();
+		}else{
+			perPage.fadeOut();
+		}
 		for(var objType in globalVar.displayArray){
-			if (objType === "ButtonParticle"){     //重新排序控制绘图顺序
-				resortButtonParticle(globalVar.displayArray);
+			if (objType === "ButtonParticle"){     
+				if (ButtonPlus.prototype.hoverObjCount > 0){    //假如没有button处于hover/click状态，则不进行排序，减少计算次数
+					resortButtonParticle(globalVar.displayArray);   //重新排序控制绘图顺序
+				}
 				ButtonPlus.pushMatrix(globalVar.pp);
 				globalVar.translate.x += (globalVar.transTarget.x - globalVar.translate.x) * 0.2;
 				globalVar.translate.y += (globalVar.transTarget.y - globalVar.translate.y) * 0.2;
 				ButtonPlus.translate(globalVar.translate.x, globalVar.translate.y, globalVar.pp);
-
-				var totalHeight =  globalVar.displayArray[objType].length / globalVar.countPerRow * globalVar.cellSize;
-				globalVar.transTarget.totalPage = totalHeight / p.height;
-				 if (globalVar.translate.currentPage < globalVar.transTarget.totalPage - 1 && globalVar.alignState){
-				 	$("#nextPage").fadeIn();
-				 }else{
-				 	$("#nextPage").fadeOut();
-				 }
-				 if (globalVar.translate.currentPage > 0 && globalVar.alignState){
-				 	$("#perPage").fadeIn();
-				 }else{
-				 	$("#perPage").fadeOut();
-				 }
-
 			}
 
 			for(var i = 0, length = globalVar.displayArray[objType].length;i < length;i++){
@@ -94,12 +98,11 @@ var sketch = function (p){
 				ButtonPlus.popMatrix(globalVar.pp);
 			}
 		}
-		
 	};	
-	
 };
 
-var myp5 = new p5(sketch,'sketch');
+new p5(sketch,'sketch');
+
 var doc = document;
 setTimeout(resizeCanvas,0);    //延迟执行，不然canvas的width跟heigth的值为0；
 
@@ -119,32 +122,47 @@ function resizeCanvas(){       //调整canvas的大小与位置
     }else{
         top = (globalVar.height - doc.documentElement.clientHeight + 50) / 2;
     }
+	
+	if (sketch.style.top < 0){   //5.23修复bug.表现为当窗口resize时,sketch会重新定位,如果之前sketch被移到上部的话,会被移回
+		sketch.style.top = sketch.style.top + top + "px";
+	} 
     sketch.style.left = left + "px";
-    sketch.style.top = top + "px";
+    
 	
 	/**
 	 * resize后button自适应位置
 	 */
-	var len = globalVar.displayArray.ButtonParticle.length;
-	var w = globalVar.countPerRow * globalVar.cellSize;
-	left = (globalVar.width - w) / 2 + 0.5 * globalVar.cellSize;
-	if (globalVar.alignState){
-		for(var k = 0; k < len; k++){
-			var i = k % globalVar.countPerRow;
-			var j = Math.floor(k / globalVar.countPerRow) + 2;
-			globalVar.displayArray.ButtonParticle[k].attractPt.position =  new p5.Vector(i * globalVar.cellSize + left, j * globalVar.cellSize);
+	if (globalVar.displayArray.ButtonParticle !== undefined){     //假如画面中没有ButtonParticle，则不运行
+		var len = globalVar.displayArray.ButtonParticle.length;
+		var w = globalVar.countPerRow * globalVar.cellSize;
+		left = (globalVar.width - w) / 2 + 0.5 * globalVar.cellSize;
+		if (globalVar.alignState){
+			for(var k = 0; k < len; k++){
+				var i = k % globalVar.countPerRow;
+				var j = Math.floor(k / globalVar.countPerRow) + 2;
+				globalVar.displayArray.ButtonParticle[k].attractPt.position =  new p5.Vector(i * globalVar.cellSize + left, j * globalVar.cellSize);
+			}
+		}else{
+			globalVar.attractPtL.position.x = globalVar.width / 2 - 250;  //调整画布时,attractPtL与attractPtR也得更改位置
+			globalVar.attractPtR.position.x = globalVar.width / 2 + 250;
+			globalVar.attractPtL.position.y = globalVar.height * 0.6;
+			globalVar.attractPtR.position.y = globalVar.height * 0.6;
 		}
-	}else{
-		globalVar.attractPtL.position.x = globalVar.width / 2 - 250;  //调整画布时,attractPtL与attractPtR也得更改位置
-		globalVar.attractPtR.position.x = globalVar.width / 2 + 250;
-		globalVar.attractPtL.position.y = globalVar.height * 0.6;
-		globalVar.attractPtR.position.y = globalVar.height * 0.6;
 	}
+}
+
+function resizeInfoBody(){
+	var infoBody = doc.getElementById("infoBody");
+	if(infoBody){
+		infoBody.style.left = ((doc.documentElement.clientWidth - parseInt($("#introduction").css("width")) - parseInt($("#introduction").css("padding-left")) * 2) / 2) + "px";
+	}
+	// console.log(doc.documentElement.clientWidth);
+	console.log($("#introduction").css("width"));
 }
 
 function resortButtonParticle(bp){
 	/**
-	 * 为displayArray.ButtonParticle
+	 * 为displayArray.ButtonParticle重新排序
 	 */
 	var newList = [],
 		selectObj = [];
@@ -167,91 +185,78 @@ $(doc).ready(function(){
 	//默认获取用户
 	getInfo("posts","special_invitation");
 	
-	//获取用户
-	$("#getUsers").click(function(){    //相当于刷新，所有很多状态要重置
-		// ButtonPlus.stateReset();    //状态重置
-		// globalVar.alignState = false;    //状态重置
+	$("body").click(function (e){              //事件委托
+		if ($(e.target).is("#getUsers")){      //相当于刷新，所有很多状态要重置
+			// ButtonPlus.stateReset();    //状态重置
+			// globalVar.alignState = false;    //状态重置
 
-		// var doc = document;                             ////重置infoFrame
-		// var infoFrame = doc.getElementById("infoFrame");
-		// if(infoFrame){
-		// 	infoFrame.style.visibility = "hidden";
-		// }
+			// var doc = document;                             ////重置infoFrame
+			// var infoFrame = doc.getElementById("infoFrame");
+			// if(infoFrame){
+			// 	infoFrame.style.visibility = "hidden";
+			// }
 
-		// getInfo("users","special_invitation");
-	});
-	
-	//获取文章
-	$("#getPosts").click(function(){   //相当于刷新，所有很多状态要重置
-		ButtonPlus.stateReset();    //状态重置
-		globalVar.alignState = false;    //状态重置
+			// getInfo("users","special_invitation");
+		}else if ($(e.target).is("#getPosts")){      //相当于刷新，所有很多状态要重置
+			ButtonPlus.stateReset();    //状态重置
+			globalVar.alignState = false;    //状态重置
 
-        //重置infoFrame
-		var infoFrame = doc.getElementById("infoFrame");
-		if(infoFrame){
-			infoFrame.style.visibility = "hidden";
-		}
-
-		getInfo("posts");
-		ButtonPlus.prototype.hoverObjCount += 1; //由于按钮是在FliterBar上，getInfo的时候被重置了，所以+1
-	});
-	
-	//排列
-	$("#align").click(function (){
-		var w = globalVar.countPerRow * globalVar.cellSize;
-		var left = (globalVar.width - w) / 2 + 0.5 * globalVar.cellSize;
-		
-		if (globalVar.alignState){
-			globalVar.transTarget.x = 0;
-			globalVar.transTarget.y = 0;
-			globalVar.translate.currentPage = 0;
-		}
-		globalVar.alignState = ~globalVar.alignState;
-		var len = globalVar.displayArray.ButtonParticle.length;
-		if (globalVar.alignState){
-			for(var k = 0; k < len; k++){
-				var i = k % globalVar.countPerRow;
-				var j = Math.floor(k / globalVar.countPerRow) + 2;
-				
-				var options = {
-					"position" : new p5.Vector(i * globalVar.cellSize + left, j * globalVar.cellSize),
-					"strength" : 1.5,
-					"vortex" : false
-				};
-				var attractPt = new AttractPoint(options);
-				globalVar.displayArray.ButtonParticle[k].attractPt = attractPt;
-				globalVar.displayArray.ButtonParticle[k].vortexAttract = false;
+			//重置infoFrame
+			var infoFrame = doc.getElementById("infoFrame");
+			if(infoFrame){
+				infoFrame.style.visibility = "hidden";
 			}
-		}else{
-			for(var k = 0; k < len; k++){
-				globalVar.displayArray.ButtonParticle[k].attractPt = globalVar.attractPtL;
-				globalVar.displayArray.ButtonParticle[k].vortexAttract = true;
+
+			getInfo("posts");
+			ButtonPlus.prototype.hoverObjCount += 1; //由于按钮是在FliterBar上，getInfo的时候被重置了，所以+1
+		}else if($(e.target).is("#align")){
+			var w = globalVar.countPerRow * globalVar.cellSize;
+			var left = (globalVar.width - w) / 2 + 0.5 * globalVar.cellSize;
+			
+			if (globalVar.alignState){
+				globalVar.transTarget.x = 0;
+				globalVar.transTarget.y = 0;
+				globalVar.translate.currentPage = 0;
 			}
+			globalVar.alignState = ~globalVar.alignState;
+			var len = globalVar.displayArray.ButtonParticle.length;
+			if (globalVar.alignState){
+				for(var k = 0; k < len; k++){
+					var i = k % globalVar.countPerRow;
+					var j = Math.floor(k / globalVar.countPerRow) + 2;
+					
+					var options = {
+						"position" : new p5.Vector(i * globalVar.cellSize + left, j * globalVar.cellSize),
+						"strength" : 1.5,
+						"vortex" : false
+					};
+					var attractPt = new AttractPoint(options);
+					globalVar.displayArray.ButtonParticle[k].attractPt = attractPt;
+					globalVar.displayArray.ButtonParticle[k].vortexAttract = false;
+				}
+			}else{
+				for(var k = 0; k < len; k++){
+					globalVar.displayArray.ButtonParticle[k].attractPt = globalVar.attractPtL;
+					globalVar.displayArray.ButtonParticle[k].vortexAttract = true;
+				}
+			}
+		}else if($(e.target).is("#nextPage")){
+			scrollDown();
+		}else if($(e.target).is("#perPage")){
+			scrollUp();
+		}else if($(e.target).is("#filterBarBtn")){
+			$("#filter").slideDown("slow");      //下拉显示fliter
 		}
-		
 	});
-
-});
-
-
-$("body").click(function (e){
-	if ($(e.target).is("#filterBar , #filterBarBtn , #filterBar button")){
-		return;
-	}else{
-		//折叠FilterBar
-		$("#filter").slideUp("fast");    //隐藏fliter
-	}
 });
 
 //窗口尺寸改变
 $(window).resize(function() {
 	$("#infoFrame").css("width", $(window).width());
-	resizeCanvas();   //调整canv位置与大小
+	resizeCanvas();   //调整canvas位置与大小
+	resizeInfoBody();  //调整infoBody位置
 });
 
-$("#filterBarBtn").mouseover(function (){
-	$("#filter").slideDown("slow");      //下拉显示fliter
-});
 
 $("#sketch").mouseenter(function (e){
 	$("#filter").slideUp("fast");
@@ -261,17 +266,10 @@ $("#sketch").mouseenter(function (e){
 doc.body.addEventListener("DOMMouseScroll", function(event) {
 	if (globalVar.alignState){
 		var direction= event.detail && (event.detail > 0 ? "mousedown" : "mouseup");
-		var direction = event.wheelDelta && (event.wheelDelta > 0 ? "mouseup" : "mousedown");
 		if (direction === "mouseup"){
-			if (globalVar.translate.currentPage > 0){
-				globalVar.transTarget.y += 400;
-				globalVar.translate.currentPage -= 1;
-			}
+			scrollUp();
 		}else{
-			if (globalVar.translate.currentPage < globalVar.transTarget.totalPage - 1){
-				globalVar.transTarget.y -= 400;
-				globalVar.translate.currentPage += 1;
-			}
+			scrollDown();
 		}
 	}    
 });
@@ -282,35 +280,28 @@ doc.body.onmousewheel = function (event) {
 	
 	if (globalVar.alignState){
 		event = event || window.event;
-
 		var direction = event.wheelDelta && (event.wheelDelta > 0 ? "mouseup" : "mousedown");
 		if (direction === "mouseup"){
-			if (globalVar.translate.currentPage > 0){
-				globalVar.transTarget.y += 400;
-				globalVar.translate.currentPage -= 1;
-			}
+			scrollUp();
 		}else{
-			if (globalVar.translate.currentPage < globalVar.transTarget.totalPage - 1){
-				globalVar.transTarget.y -= 400;
-				globalVar.translate.currentPage += 1;
-			}
+			scrollDown();
 		}
 	}
 };
 
-$("#nextPage").click(function (){
-	if (globalVar.translate.currentPage < globalVar.transTarget.totalPage - 1){
-		globalVar.transTarget.y -= 400;
-		globalVar.translate.currentPage += 1;
-	}
-});
-
-$("#perPage").click(function (){
+function scrollUp(){
 	if (globalVar.translate.currentPage > 0){
-		globalVar.transTarget.y += 400;
+		globalVar.transTarget.y += globalVar.scrollDis;
 		globalVar.translate.currentPage -= 1;
 	}
-});
+}
+function scrollDown(){
+	if (globalVar.translate.currentPage < globalVar.transTarget.totalPage - 1){
+		globalVar.transTarget.y -= globalVar.scrollDis;
+		globalVar.translate.currentPage += 1;
+	}
+}
+
 
 $("#filterT, #filterBarBtn").mouseover(function (){       //让鼠标选择不中FilterBar下面的button
 	if (ButtonPlus.prototype.hoverObjCount < 1){
@@ -540,4 +531,15 @@ var options_cancelAll = {
 	text : ""
 };
 
+var options_search = {
+	id : "filterBar_search",
+	type : "search",
+	class : "search",
+	keyword : "search",
+	parentId : "btnGroup",
+	title: "搜索",
+	text : "搜索"
+};
+
 globalVar.filterButton.push(new FilterButton(options_cancelAll));
+globalVar.filterButton.push(new FilterButton(options_search));

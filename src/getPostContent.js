@@ -2,6 +2,7 @@ var globalVar = require("./GlobalVar.js");
 
 var getPostContent = function (id, title){
 	//postContent.style.display = "block";//
+	var loading = $("#loading");
 	$("#postContent").fadeIn();
 
 	var $infoFrame = $("#infoFrame");
@@ -81,8 +82,9 @@ var getPostContent = function (id, title){
 			if (title){
 				title.classList.add("title_link");     //添加标题鼠标悬浮样式
 			}
+			this.disabled = true;        //防止双击
 			$(this).fadeOut();
-			
+			$("#loading").fadeOut("slow");
 			var top = $sketch.css("top");
 			$sketch.css("top",parseInt(top) + 900 + "px"); //将sketch移回
 			$sketch.fadeIn();
@@ -91,8 +93,9 @@ var getPostContent = function (id, title){
 		rightCtrlBar.appendChild(cancel);
 	}
 	$("#postContent_delete").fadeIn();
+	cancel.disabled = false;
 	
-	$("#loading").fadeIn("fast");
+	loading.fadeIn("fast");
 	
 	if(window.XMLHttpRequest){
 		XMLHTTP=new XMLHttpRequest();
@@ -102,13 +105,14 @@ var getPostContent = function (id, title){
 
 	XMLHTTP.onreadystatechange=function(){
 		if(XMLHTTP.readyState==4 && XMLHTTP.status==200){
-			$("#loading").fadeOut("slow");
+			loading.fadeOut("slow");
 			// var navigation_bar = document.getElementById("navigation_bar");
 			var infoFrame = document.getElementById("infoFrame");
 			var postContent = document.getElementById("postContent");
 			if(infoFrame){
 				if(postContent){
-					postContent.innerHTML = JSON.parse(XMLHTTP.responseText)[id].content;
+					var post = JSON.parse(XMLHTTP.responseText)[id];
+					postContent.innerHTML = post.content;
 				}
 			}
 			// $("#postContent").css("display","none");
@@ -116,7 +120,7 @@ var getPostContent = function (id, title){
 			
 		}
 	};
-	XMLHTTP.open("GET","/api/getPostContent.json");
+	XMLHTTP.open("GET","api/getPostContent.json");
 	XMLHTTP.send();
 };
 
