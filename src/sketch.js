@@ -157,7 +157,7 @@ function resizeInfoBody(){
 		infoBody.style.left = ((doc.documentElement.clientWidth - parseInt($("#introduction").css("width")) - parseInt($("#introduction").css("padding-left")) * 2) / 2) + "px";
 	}
 	// console.log(doc.documentElement.clientWidth);
-	console.log($("#introduction").css("width"));
+	//console.log($("#introduction").css("width"));
 }
 
 function resortButtonParticle(bp){
@@ -186,7 +186,7 @@ $(doc).ready(function(){
 	getInfo("posts","special_invitation");
 	
 	$("body").click(function (e){              //事件委托
-		if ($(e.target).is("#getUsers")){      //相当于刷新，所有很多状态要重置
+		if ($(e.target).is("#getUsers") || $(e.target).is("#getUsers div")){      //相当于刷新，所有很多状态要重置
 			// ButtonPlus.stateReset();    //状态重置
 			// globalVar.alignState = false;    //状态重置
 
@@ -197,7 +197,7 @@ $(doc).ready(function(){
 			// }
 
 			// getInfo("users","special_invitation");
-		}else if ($(e.target).is("#getPosts")){      //相当于刷新，所有很多状态要重置
+		}else if ($(e.target).is("#getPosts") || $(e.target).is("#getPosts div")){      //相当于刷新，所有很多状态要重置
 			ButtonPlus.stateReset();    //状态重置
 			globalVar.alignState = false;    //状态重置
 
@@ -209,7 +209,7 @@ $(doc).ready(function(){
 
 			getInfo("posts");
 			ButtonPlus.prototype.hoverObjCount += 1; //由于按钮是在FliterBar上，getInfo的时候被重置了，所以+1
-		}else if($(e.target).is("#align")){
+		}else if($(e.target).is("#align") || $(e.target).is("#align div")){
 			var w = globalVar.countPerRow * globalVar.cellSize;
 			var left = (globalVar.width - w) / 2 + 0.5 * globalVar.cellSize;
 			
@@ -303,13 +303,13 @@ function scrollDown(){
 }
 
 
-$("#filterT, #filterBarBtn").mouseover(function (){       //让鼠标选择不中FilterBar下面的button
+$("#filterT, #filterBarBtn, #btnGroup").mouseover(function (){       //让鼠标选择不中FilterBar下面的button
 	if (ButtonPlus.prototype.hoverObjCount < 1){
 		ButtonPlus.prototype.hoverObjCount += 1;
 	}
 });
 
-$("#filterT, #filterBarBtn").mouseout(function (){
+$("#filterT, #filterBarBtn, #btnGroup").mouseout(function (){
 	if (ButtonPlus.prototype.hoverObjCount > 0){
 		ButtonPlus.prototype.hoverObjCount -= 1;
 	}
@@ -536,7 +536,7 @@ var options_search = {
 	type : "search",
 	class : "search",
 	keyword : "search",
-	parentId : "btnGroup",
+	parentId : "search",
 	title: "搜索",
 	text : "搜索"
 };

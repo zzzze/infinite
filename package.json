@@ -1,7 +1,7 @@
 {
   "name": "infinite",
   "version": "1.0.0",
-  "description": "最毕设交互首页",
+  "description": "",
   "main": "sketch.js",
   "scripts": {
     "test": "webpack",
@@ -10,14 +10,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ZzzzS/wordpress-theme-zbs.git"
+    "url": "https://git.coding.net/n-dda/Infinite.git"
   },
   "author": "Zzzz",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ZzzzS/wordpress-theme-zbs/issues"
-  },
-  "homepage": "https://github.com/ZzzzS/wordpress-theme-zbs#readme",
   "devDependencies": {
     "css-loader": "^0.23.1",
     "node-sass": "^3.7.0",
