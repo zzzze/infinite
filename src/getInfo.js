@@ -52,7 +52,7 @@ var getInfo = function (type,arg){
 					globalVar.displayArray.ButtonParticle.push(newObj);
 				}
 				var totalHeight =  globalVar.displayArray.ButtonParticle.length / globalVar.countPerRow * globalVar.cellSize;
-				globalVar.transTarget.totalPage = Math.ceil(totalHeight / globalVar.pp.height);
+				globalVar.transTarget.totalPage = Math.ceil(totalHeight / (globalVar.pp.height -  globalVar.cellSize * 2));
 			}else{
 				$("#loading").fadeIn();
 			}

@@ -277,7 +277,7 @@ doc.body.addEventListener("DOMMouseScroll", function(event) {
 // chrome and ie
 doc.body.onmousewheel = function (event) {
 	$("#filter").slideUp("fast");     //隐藏fliter
-	
+	console.log(globalVar.translate.currentPage,globalVar.transTarget.totalPage);
 	if (globalVar.alignState){
 		event = event || window.event;
 		var direction = event.wheelDelta && (event.wheelDelta > 0 ? "mouseup" : "mousedown");
@@ -291,12 +291,14 @@ doc.body.onmousewheel = function (event) {
 
 function scrollUp(){
 	if (globalVar.translate.currentPage > 0){
+		console.log("xxx");
 		globalVar.transTarget.y += globalVar.scrollDis;
 		globalVar.translate.currentPage -= 1;
 	}
 }
 function scrollDown(){
 	if (globalVar.translate.currentPage < globalVar.transTarget.totalPage - 1){
+		console.log("yyy");
 		globalVar.transTarget.y -= globalVar.scrollDis;
 		globalVar.translate.currentPage += 1;
 	}
