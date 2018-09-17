@@ -1,13 +1,13 @@
 var Particle = function (options){
-	this.visualObject = options.visualObject;   //visualObject为实现了position属性与display方法的对象
-	this.p = options.p;
-	this.reflect = false;
-	this.topspeed = options.topspeed || Math.random() * 3 + 2;  //控制最高速度
-    this.acceleration = options.acceleration ?  options.acceleration.copy() : new p5.Vector(0,0);  //加速度
-    this.velocity = options.velocity ?  options.velocity.copy() : new p5.Vector(    //速度
-        Math.random()*((Math.random()>0.5)?-0.5:0.5),
-        Math.random()-((Math.random()>0.5)?0.5:1)
-    );
+  this.visualObject = options.visualObject;   //visualObject为实现了position属性与display方法的对象
+  this.p = options.p;
+  this.reflect = false;
+  this.topspeed = options.topspeed || Math.random() * 3 + 2;  //控制最高速度
+  this.acceleration = options.acceleration ?  options.acceleration.copy() : new p5.Vector(0,0);  //加速度
+  this.velocity = options.velocity ?  options.velocity.copy() : new p5.Vector(    //速度
+    Math.random()*((Math.random()>0.5)?-0.5:0.5),
+    Math.random()-((Math.random()>0.5)?0.5:1)
+  );
 }
 
 //粒子作用力

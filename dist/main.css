@@ -1,0 +1,295 @@
+@charset "UTF-8";
+#sketch {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 50px;
+  z-index: -1; }
+
+.postMeta {
+  display: inline-block;
+  font-size: 0.9em;
+  margin-right: 20px;
+  margin-top: 5px;
+  color: gray; }
+  .postMeta[title=author]:before {
+    content: "\F007";
+    font-family: FontAwesome;
+    margin-right: 5px;
+    color: #555; }
+  .postMeta[title=productType]:before {
+    content: "\F02E";
+    font-family: FontAwesome;
+    margin-right: 5px;
+    color: #555; }
+  .postMeta[title=major]:before {
+    content: "\F19D";
+    font-family: FontAwesome;
+    margin-right: 5px;
+    color: #555; }
+  .postMeta[title=creationDate]:before {
+    content: "\F073";
+    font-family: FontAwesome;
+    margin-right: 5px;
+    color: #555; }
+  .postMeta[title=unit]:before {
+    content: "\F0F7";
+    font-family: FontAwesome;
+    margin-right: 5px;
+    color: #555; }
+  .postMeta[title=profession]:before {
+    content: "\F0B1";
+    font-family: FontAwesome;
+    margin-right: 5px;
+    color: #555; }
+
+#filterBar {
+  position: absolute;
+  width: 100%;
+  top: 50px;
+  left: 0; }
+  #filterBar #filter {
+    display: none; }
+    #filterBar #filter #filterT {
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px gray solid;
+      border-radius: 0 0 10px 10px;
+      -moz-border-radius: 0 0 10px 10px;
+      -webkit-border-radius: 0 0 10px 10px;
+      margin: 0 auto; }
+      #filterBar #filter #filterT tr:nth-last-child(2) th {
+        border-bottom: none; }
+      #filterBar #filter #filterT th {
+        border-right: none;
+        background-color: #ccc;
+        color: #3868ae;
+        padding: 10px 10px;
+        border-right: 1px gray solid;
+        font-size: 16px;
+        border-bottom: 1px gray dashed; }
+      #filterBar #filter #filterT td {
+        text-align: center;
+        padding: 0; }
+        #filterBar #filter #filterT td input {
+          margin: 10px 20px;
+          height: 30px; }
+        #filterBar #filter #filterT td .cancel {
+          width: 20px;
+          height: 100%;
+          padding: 0;
+          margin: 0;
+          border-width: 0;
+          border-radius: 0px;
+          -moz-border-radius: 0px;
+          -webkit-border-radius: 0px;
+          background-color: #ccc;
+          outline: none; }
+          #filterBar #filter #filterT td .cancel:before {
+            font-family: FontAwesome;
+            color: #ccc;
+            content: "\F00D"; }
+          #filterBar #filter #filterT td .cancel:hover {
+            border: none;
+            cursor: default; }
+        #filterBar #filter #filterT td .cancelActive {
+          background-color: #D9534F; }
+          #filterBar #filter #filterT td .cancelActive:before {
+            color: white; }
+          #filterBar #filter #filterT td .cancelActive:hover {
+            border: 1px gray solid;
+            cursor: pointer; }
+      #filterBar #filter #filterT .cancelCell {
+        border-left: 1px gray solid; }
+      #filterBar #filter #filterT .active {
+        background-color: #3868ae;
+        border: 1px #3868ae solid;
+        color: white; }
+    #filterBar #filter #search {
+      border-top: 1px solid gray;
+      width: 100%;
+      display: -webkit-flex;
+      /* Safari */
+      display: flex;
+      justify-content: center;
+      flex-direction: row;
+      flex-wrap: nowrap; }
+  #filterBar #filterBarBtn {
+    display: block;
+    width: 100px;
+    border-width: 0;
+    background: #bbb;
+    height: 15px;
+    padding: 0;
+    outline: none;
+    border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+    margin: 0 auto; }
+    #filterBar #filterBarBtn:before {
+      position: relative;
+      display: block;
+      bottom: 7px;
+      height: 0;
+      color: white;
+      font-family: FontAwesome;
+      content: "\F078"; }
+    #filterBar #filterBarBtn:hover {
+      cursor: pointer; }
+      #filterBar #filterBarBtn:hover:before {
+        color: #3868ae; }
+
+#btnGroup {
+  position: absolute;
+  right: 50px;
+  bottom: 30px; }
+  #btnGroup #getPosts, #btnGroup #getUsers, #btnGroup #align {
+    margin: 10px 10px;
+    height: 60px;
+    background-color: rgba(0, 0, 0, 0.5); }
+    #btnGroup #getPosts:hover, #btnGroup #getUsers:hover, #btnGroup #align:hover {
+      background-color: #3868ae; }
+    #btnGroup #getPosts:before, #btnGroup #getUsers:before, #btnGroup #align:before {
+      font-size: 20px;
+      font-family: FontAwesome;
+      color: white;
+      content: "\F0F6"; }
+    #btnGroup #getPosts div, #btnGroup #getUsers div, #btnGroup #align div {
+      text-align: center;
+      color: white;
+      padding-top: 5px; }
+  #btnGroup #getUsers:before {
+    content: "\F0C0"; }
+  #btnGroup #getUsers:hover {
+    cursor: not-allowed; }
+  #btnGroup #align:before {
+    content: "\F00A"; }
+
+#infoFrame {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 101px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-top: solid gray 1px;
+  background-color: white; }
+  #infoFrame #infoBody {
+    position: absolute;
+    max-width: 850px;
+    width: 100%;
+    top: 0;
+    left: 200px; }
+    #infoFrame #infoBody #introduction {
+      max-width: 850px;
+      padding: 0 20px;
+      margin: 0 auto;
+      height: 100px;
+      padding-left: 20px;
+      padding-right: 20px; }
+      #infoFrame #infoBody #introduction img {
+        width: 80px;
+        margin: 10px 20px;
+        float: left;
+        border-radius: 10px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px; }
+      #infoFrame #infoBody #introduction #postList {
+        float: right;
+        max-width: 250px;
+        height: 90px;
+        margin: 5px 0;
+        padding: 0 0 0 10px;
+        overflow-y: auto;
+        border-left: 1px gray dashed; }
+        #infoFrame #infoBody #introduction #postList:before {
+          content: '\4F5C\54C1\FF1A'; }
+      #infoFrame #infoBody #introduction .postList {
+        color: gray;
+        font-size: 10px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow-x: hidden;
+        margin: 5px 0; }
+        #infoFrame #infoBody #introduction .postList:hover {
+          cursor: pointer;
+          color: #3868ae; }
+        #infoFrame #infoBody #introduction .postList:before {
+          font-family: FontAwesome;
+          content: "\F10C";
+          margin-right: 5px; }
+      #infoFrame #infoBody #introduction #infoContainer {
+        height: 100px;
+        white-space: nowrap; }
+        #infoFrame #infoBody #introduction #infoContainer #title {
+          padding: 1px 0; }
+        #infoFrame #infoBody #introduction #infoContainer #name {
+          padding: 1px 0; }
+        #infoFrame #infoBody #introduction #infoContainer .title_link:hover {
+          cursor: pointer;
+          color: #3868ae; }
+
+#postContent_delete, #toTop {
+  border: solid 1px #D9534F;
+  background-color: #D9534F;
+  margin-left: 10px;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  padding: 0 0 3px 5px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%; }
+  #postContent_delete:before, #toTop:before {
+    font-family: FontAwesome;
+    margin-right: 5px;
+    color: #555;
+    color: white;
+    content: "\F00D";
+    text-align: center; }
+
+#toTop {
+  background-color: white;
+  border: solid 1px gray;
+  right: 90px;
+  display: none; }
+  #toTop:before {
+    content: "\F077";
+    color: gray; }
+
+#sortInfoFrame {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  text-align: center;
+  position: absolute;
+  padding: 15px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px; }
+
+#nextPage, #perPage {
+  position: absolute;
+  display: none;
+  background-color: rgba(150, 150, 150, 0.5);
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border: none;
+  padding-right: 2px;
+  width: 30px;
+  height: 30px;
+  right: 100px;
+  bottom: 200px; }
+  #nextPage:before, #perPage:before {
+    content: "\F078";
+    font-family: FontAwesome;
+    margin-right: 5px;
+    color: #555;
+    color: white; }
+  #nextPage:hover:before, #perPage:hover:before {
+    color: #3868ae; }
+
+#perPage {
+  bottom: 280px; }
+  #perPage:before {
+    content: "\F077"; }

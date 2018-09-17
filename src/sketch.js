@@ -1,5 +1,7 @@
 "use strict"; //严格模式
-
+import Scene from '@kapok/scene'
+import Geometry from './Geometry'
+import ParticleObject from './Particle_01' 
 var AttractPoint = require("./AttractPoint.js");
 var globalVar = require("./GlobalVar.js");
 var VisualObject = require("./VisualObject.js");
@@ -7,6 +9,35 @@ var Particle = require("./Particle.js");
 var ButtonPlus = require("./ButtonPlus.js");
 var FilterButton = require("./FilterButton.js");
 require('./main.scss');
+console.log(Scene)
+
+const scene = new Scene({id: 'canvas'})
+scene.setup = function (ctx) {
+  globalVar.displayArray.backgroundBall = [];
+  for(var i = 0; i < 100; i++){
+    var size = Math.random()*20 + 15;
+    const geometry = new Geometry({
+      position: new p5.Vector((Math.random() * this.width - 100) + 50,(Math.random() * this.height - 60) + 30),
+      width: size,
+      height: size,
+      ctx,
+      fillCol : 'rgba(200, 200, 200, .5)'
+    }) 
+    const particleObject = new ParticleObject({ geometry, ctx })
+    globalVar.displayArray.backgroundBall.push(particleObject);
+  }
+}
+
+scene.loop = function (ctx) {
+  scene.clean()
+  for(var objType in globalVar.displayArray){
+    for(var i = 0, length = globalVar.displayArray[objType].length;i < length;i++){
+      globalVar.displayArray[objType][i].display();
+    }
+  }
+}
+
+scene.start()
 
 var sketch = function (p){
 	globalVar.width = Math.max(document.documentElement.clientWidth,960);
@@ -16,8 +47,8 @@ var sketch = function (p){
 		perPage;
 	p.preload = function () {
 		try{
-			p.soundFormats('wav', 'ogg');
-			globalVar.SOUNDFILE = p.loadSound('sound/water2.wav');
+			// p.soundFormats('wav', 'ogg');
+			// globalVar.SOUNDFILE = p.loadSound('sound/water2.wav');
 		}catch(e){
 			console.log(e.message);      //貌似ie不支持soundformats方法
 		}
@@ -46,25 +77,33 @@ var sketch = function (p){
 		p.createCanvas(globalVar.width, globalVar.height);
 		p.canvas.id = "infinite";
 		p.canvas.innerHTML = "您的浏览器不支持Canvas标签！"
-		globalVar.displayArray.backgroundBall = [];
-		for(var i = 0; i < 100; i++){
-			var size = Math.random()*20 + 15;
-			var optionsVO = {
-				position : new p5.Vector((Math.random() * p.width - 100) + 50,(Math.random() * p.height - 60) + 30),
-				width : size,
-				height : size,
-				p : globalVar.pp,
-				fillCol : globalVar.pp.color(200,200,200,50)
-			};
-			var options = {
-				visualObject : new VisualObject(optionsVO),
-				p : globalVar.pp
-			};
-			globalVar.displayArray.backgroundBall.push(new Particle(options));
-		}
+		// globalVar.displayArray.backgroundBall = [];
+		// for(var i = 0; i < 100; i++){
+		// 	var size = Math.random()*20 + 15;
+		// 	// var optionsVO = {
+		// 	// 	position : new p5.Vector((Math.random() * p.width - 100) + 50,(Math.random() * p.height - 60) + 30),
+		// 	// 	width : size,
+		// 	// 	height : size,
+		// 	// 	p : globalVar.pp,
+		// 	// 	fillCol : globalVar.pp.color(200,200,200,50)
+    //   // };
+    //   const geometry = new Geometry({
+    //     position: new p5.Vector((Math.random() * p.width - 100) + 50,(Math.random() * p.height - 60) + 30),
+    //     width: size,
+    //     height: size,
+    //     p: globalVar.pp,
+		// 		fillCol : globalVar.pp.color(200,200,200,50)
+    //   }) 
+		// 	// var options = {
+		// 	// 	visualObject : new VisualObject(optionsVO),
+		// 	// 	p : globalVar.pp
+    //   // };
+    //   const particleObject = new ParticleObject({ geometry })
+		// 	globalVar.displayArray.backgroundBall.push(particleObject);
+    // }
 	};
 
-	p.draw = function (){
+  p.draw = function (){
 		p.background(255);
 		// globalVar.transTarget.totalPage = 3;
 		// globalVar.attractPtL.display();
@@ -78,26 +117,26 @@ var sketch = function (p){
 			perPage.fadeIn();
 		}else{
 			perPage.fadeOut();
-		}
-		for(var objType in globalVar.displayArray){
-			if (objType === "ButtonParticle"){     
-				if (ButtonPlus.prototype.hoverObjCount > 0){    //假如没有button处于hover/click状态，则不进行排序，减少计算次数
-					resortButtonParticle(globalVar.displayArray);   //重新排序控制绘图顺序
-				}
-				ButtonPlus.pushMatrix(globalVar.pp);
-				globalVar.translate.x += (globalVar.transTarget.x - globalVar.translate.x) * 0.2;
-				globalVar.translate.y += (globalVar.transTarget.y - globalVar.translate.y) * 0.2;
-				ButtonPlus.translate(globalVar.translate.x, globalVar.translate.y, globalVar.pp);
-			}
-
-			for(var i = 0, length = globalVar.displayArray[objType].length;i < length;i++){
-				globalVar.displayArray[objType][i].display();
-			}
-
-			if (objType === "ButtonParticle") {
-				ButtonPlus.popMatrix(globalVar.pp);
-			}
-		}
+    }
+		// for(var objType in globalVar.displayArray){
+		// 	if (objType === "ButtonParticle"){     
+		// 		if (ButtonPlus.prototype.hoverObjCount > 0){    //假如没有button处于hover/click状态，则不进行排序，减少计算次数
+		// 			resortButtonParticle(globalVar.displayArray);   //重新排序控制绘图顺序
+		// 		}
+		// 		ButtonPlus.pushMatrix(globalVar.pp);
+		// 		globalVar.translate.x += (globalVar.transTarget.x - globalVar.translate.x) * 0.2;
+		// 		globalVar.translate.y += (globalVar.transTarget.y - globalVar.translate.y) * 0.2;
+		// 		ButtonPlus.translate(globalVar.translate.x, globalVar.translate.y, globalVar.pp);
+		// 	}
+    //
+		// 	for(var i = 0, length = globalVar.displayArray[objType].length;i < length;i++){
+		// 		globalVar.displayArray[objType][i].display();
+		// 	}
+    //
+		// 	if (objType === "ButtonParticle") {
+		// 		ButtonPlus.popMatrix(globalVar.pp);
+		// 	}
+		// }
 	};	
 };
 
@@ -143,10 +182,10 @@ function resizeCanvas(){       //调整canvas的大小与位置
 				globalVar.displayArray.ButtonParticle[k].attractPt.position =  new p5.Vector(i * globalVar.cellSize + left, j * globalVar.cellSize);
 			}
 		}else{
-			globalVar.attractPtL.position.x = globalVar.width / 2 - 250;  //调整画布时,attractPtL与attractPtR也得更改位置
-			globalVar.attractPtR.position.x = globalVar.width / 2 + 250;
-			globalVar.attractPtL.position.y = globalVar.height * 0.6;
-			globalVar.attractPtR.position.y = globalVar.height * 0.6;
+      // globalVar.attractPtL.position.x = globalVar.width / 2 - 250;  //调整画布时,attractPtL与attractPtR也得更改位置
+      // globalVar.attractPtR.position.x = globalVar.width / 2 + 250;
+      // globalVar.attractPtL.position.y = globalVar.height * 0.6;
+      // globalVar.attractPtR.position.y = globalVar.height * 0.6;
 		}
 	}
 }
@@ -181,7 +220,7 @@ function resortButtonParticle(bp){
 
 $(doc).ready(function(){
 	doc.body.style.overflow = 'hidden';
-    var getInfo = require("./getInfo.js");
+    var getInfo = require("./getInfo.js").default;
 	//默认获取用户
 	getInfo("posts","special_invitation");
 	

@@ -1,3 +1,5 @@
 /node_modules/*
 /src/.sass-cache/*
-/bak/*
+npm-debug.log
+yarn-error.log
+

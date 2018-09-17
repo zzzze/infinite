@@ -1,31 +1,30 @@
 var path = require('path');
 var webpack = require('webpack');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
 module.exports = {
-    entry:"./src/sketch.js",
-    output:{
-        path: path.join(__dirname, 'dist'),
-        publicPath:"/build/",
-        filename:"infinite.js"
-    },
-    //devtool: "source-map",
-    module: {
-        loaders: [
-        //    {
-        //         test: /\.css$/,
-        //         loader: ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap")
-        //     },
-        //     {
-        //         test: /\.less$/,
-        //         loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader?sourceMap")
-        //     },
-            {
-                test: /\.scss$/,
-                loader: ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!sass-loader?sourceMap")    //为什么是这样，尝试了一个下午啊！！！！！终于成功了
-            }
+  entry: "./src/sketch.js",
+  output: {
+    path: path.join(__dirname, 'dist'),
+    publicPath: "/build/",
+    filename: "infinite.js"
+  },
+  mode: "development",
+  devtool: "source-map",
+  module: {
+    rules: [
+      {
+        test: /\.scss$/,
+        use: [
+          {loader: "style-loader"},
+          {loader: "css-loader"},
+          {loader: "sass-loader"}
         ]
-    },
-    plugins: [
-        new ExtractTextPlugin("[name].css")
+      }, {
+        test: /\.js$/,
+        use: 'babel-loader'
+      }
     ]
+  },
+  plugins: [
+  ]
 }
