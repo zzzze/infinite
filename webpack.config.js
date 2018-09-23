@@ -25,6 +25,9 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-  ]
+  plugins: [],
+  resolve: {
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+    extensions: ['.js', '.scss']
+  }
 }
