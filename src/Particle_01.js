@@ -1,3 +1,5 @@
+import Attractor from 'Attractor'
+
 export default class Particle {
   constructor(options) {
     this.geometry = options.geometry
@@ -35,20 +37,20 @@ export default class Particle {
       }
     } else {
       if (this.geometry.position.x < -this.geometry.width/2){
-        this.geometry.position.x = this.ctx.canvas.width + this.geometry.width - Math.abs(this.geometry.position.x);
+        this.geometry.position.x = this.ctx.canvas.width + this.geometry.width - Math.abs(this.geometry.position.x)
       } 
       if (this.geometry.position.x > this.ctx.canvas.width + this.geometry.width/2){
-        this.geometry.position.x = this.geometry.position.x - this.ctx.canvas.width - this.geometry.width;
+        this.geometry.position.x = this.geometry.position.x - this.ctx.canvas.width - this.geometry.width
       }
       if (this.geometry.position.y < -this.geometry.height/2){
-        this.geometry.position.y = this.ctx.canvas.height + this.geometry.height - Math.abs(this.geometry.position.y);
+        this.geometry.position.y = this.ctx.canvas.height + this.geometry.height - Math.abs(this.geometry.position.y)
       }
       if (this.geometry.position.y > this.ctx.canvas.height + this.geometry.height/2){
-        this.geometry.position.y = this.geometry.position.y - this.ctx.canvas.height - this.geometry.height;
+        this.geometry.position.y = this.geometry.position.y - this.ctx.canvas.height - this.geometry.height
       }
     }
-    this.velocity.limit(this.topspeed);
-    this.geometry.position.add(this.velocity);
+    this.velocity.limit(this.topspeed)
+    this.geometry.position.add(this.velocity)
   }
 
   display() {

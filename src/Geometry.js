@@ -3,19 +3,20 @@ class Geometry {
     this.position = options.position.copy()
     this.width = options.width
     this.height = options.height
-    this.ctx = options.ctx 
+    this.scene = options.scene 
     this.fillCol = options.fillCol || 'rgba(200, 200, 200, .5)'
     this.lockPosition = false
   }
 
   draw() {
-    this.ctx.save()
-    this.ctx.translate(this.position.x, this.position.y)
-    this.ctx.beginPath()
-    this.ctx.arc(0, 0, this.width / 2, 0, 2 * Math.PI)
-    this.ctx.fillStyle = this.fillCol
-    this.ctx.fill()
-    this.ctx.restore()
+    const ctx = this.scene.ctx
+    ctx.save()
+    ctx.translate(this.position.x, this.position.y)
+    ctx.beginPath()
+    ctx.arc(0, 0, this.width / 2, 0, 2 * Math.PI)
+    ctx.fillStyle = this.fillCol
+    ctx.fill()
+    ctx.restore()
   }
 }
 

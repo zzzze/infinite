@@ -4,7 +4,6 @@ var globalVar = require("./GlobalVar.js");
 
 export default class Bubble extends Geometry {
   constructor(options) {
-    options.ctx = options.scene.ctx
     super(options)
     this.scene = options.scene
     this.pState = 'mouseOut'  //Button初始状态
@@ -16,7 +15,7 @@ export default class Bubble extends Geometry {
   }
 
   //判断Button是否被选中
-  isSelected() {
+  get isSelected() {
     return this.scene.mouseX >= this.position.x - this.width / 2 &&
       this.scene.mouseX <= this.position.x + this.width / 2 &&
       this.scene.mouseY >= this.position.y - this.height / 2 &&
@@ -33,17 +32,17 @@ export default class Bubble extends Geometry {
      * on (pSwitch) : Button处于开启状态
      * off (pSwitch) ： Button处于关闭状态
      */
-    if (this.isSelected()) {
+    if (this.isSelected) {
       if (this.pState == 'click') {
-        if (this.p.mouseIsPressed) {
+        if (this.scene.mouseIsPressed) {
           return 'press'
         } else {
           return 'click'
         }
       } else {
-        // if (this.p.mouseIsPressed) {
-        //   return 'press'
-        // } else {
+        if (this.scene.mouseIsPressed) {
+          return 'press'
+        } else {
           if (this.pState == 'press') {
             if (this.pSwitch == 'on') {
               this.pSwitch = 'off'
@@ -55,7 +54,7 @@ export default class Bubble extends Geometry {
           } else {
             return 'hover'
           }
-        // }
+        }
       }
     } else {
       if (this.pState == 'click') {
@@ -68,14 +67,15 @@ export default class Bubble extends Geometry {
 
   //鼠标指针图形
   cursorState(){
+    const canvas = this.scene.ctx.canvas
     const state = this.getState()
     if(this.constructor.prototype.hoverObjCount == 0){
-      this.ctx.canvas.style.cursor = 'default'
+      canvas.style.cursor = 'default'
     }else{
       if (state == 'mouseOut' && this.pState == 'hover') {
-        this.ctx.canvas.style.cursor = 'default'
+        canvas.style.cursor = 'default'
       } else if (state == 'hover' && this.pState == 'mouseOut') {
-        this.ctx.canvas.style.cursor = 'pointer'
+        canvas.style.cursor = 'pointer'
       }
     }
   }
@@ -84,7 +84,7 @@ export default class Bubble extends Geometry {
   draw() {
     this.cursorState()
     if (this.strokeCol) {
-      this.ctx.strokeStyle = this.strokeCol
+      this.scene.ctx.strokeStyle = this.strokeCol
     }
     const state = this.getState()
     switch (state) {

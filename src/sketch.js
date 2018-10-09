@@ -3,6 +3,9 @@ import Scene from '@kapok/scene'
 import Geometry from 'Geometry'
 import ParticleObject from 'Particle_01'
 import Bubble from 'Bubble'
+import ParticleSystem from 'ParticleSystem'
+import Attractor from 'Attractor'
+import VortexAttractor from 'VortexAttractor'
 var AttractPoint = require("./AttractPoint.js");
 var globalVar = require("./GlobalVar.js");
 var VisualObject = require("./VisualObject.js");
@@ -10,9 +13,10 @@ var Particle = require("./Particle.js");
 var ButtonPlus = require("./ButtonPlus.js");
 var FilterButton = require("./FilterButton.js");
 require('./main.scss');
-console.log(Scene)
 
 const scene = new Scene({id: 'canvas'})
+let ps_1 = new ParticleSystem()
+let ps_2 = new ParticleSystem()
 scene.setup = function (ctx) {
   globalVar.displayArray.backgroundBall = [];
   for(var i = 0; i < 100; i++){
@@ -21,11 +25,11 @@ scene.setup = function (ctx) {
       position: new p5.Vector((Math.random() * this.width - 100) + 50,(Math.random() * this.height - 60) + 30),
       width: size,
       height: size,
-      ctx,
+      scene,
       fillCol : 'rgba(200, 200, 200, .5)'
     })
     const particleObject_1 = new ParticleObject({ geometry: geometry_1, ctx })
-    globalVar.displayArray.backgroundBall.push(particleObject_1);
+    ps_1.addParticle(particleObject_1)
 
     var size = Math.random()*20 + 15;
     const geometry_2 = new Bubble({
@@ -38,17 +42,28 @@ scene.setup = function (ctx) {
       mouseY: scene.mouseY,
     })
     const particleObject_2 = new ParticleObject({ geometry: geometry_2, ctx })
-    globalVar.displayArray.backgroundBall.push(particleObject_2);
+    ps_2.addParticle(particleObject_2)
   }
+  const attractPt = new VortexAttractor({
+    position: new p5.Vector(350, 350),
+    width: 30,
+    height: 30,
+    scene,
+    fillCol : 'red',
+    velocity: new p5.Vector(0, 0),
+    acceleration: new p5.Vector(0, 0),
+  })
+  attractPt.lockPosition = true
+  ps_2.addAttractor(new ParticleObject({
+    geometry: attractPt,
+    ctx,
+  }))
 }
 
 scene.loop = function (ctx) {
   scene.clean()
-  for(var objType in globalVar.displayArray){
-    for(var i = 0, length = globalVar.displayArray[objType].length;i < length;i++){
-      globalVar.displayArray[objType][i].display();
-    }
-  }
+  ps_1.update()
+  ps_2.update()
 }
 
 scene.start()
