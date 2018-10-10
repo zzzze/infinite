@@ -5,7 +5,7 @@ export default class Particle {
     this.geometry = options.geometry
     this.ctx = options.ctx
     this.rebound = false
-    this.topspeed = options.topspeed || Math.random() * 3 + 2  //控制最高速度
+    this.topspeed = options.topspeed || Math.random() * 4 + 1  //控制最高速度
     this.acceleration = options.acceleration ?  options.acceleration.copy() : new p5.Vector(0,0)  //加速度
     this.velocity = options.velocity ?  options.velocity.copy() : new p5.Vector(    //速度
       Math.random() * ((Math.random() > 0.5) ? -0.5 : 0.5),
@@ -20,23 +20,25 @@ export default class Particle {
   update() {
     //速度
     if(!this.velocity){
-      var random1 = Math.random()*((Math.random()>0.5)?-0.5:0.5)
-      var random2 = Math.random()-((Math.random()>0.5)?0.5:1)
+      var random1 = Math.random() * ((Math.random() > 0.5) ? -0.5 : 0.5)
+      var random2 = Math.random() - ((Math.random() > 0.5) ? 0.5 : 1)
       this.velocity = new p5.Vector(random1,random2)
     }
 
     this.velocity.add(this.acceleration)
     this.acceleration.mult(0)  //加速度清零
+    this.velocity.limit(this.topspeed)
+    this.geometry.position.add(this.velocity)
 
     if (this.rebound) {
-      if (this.geometry.position.x < this.geometry.width/2 || this.geometry.position.x > this.ctx.canvas.width - this.geometry.width/2){
+      if (this.geometry.position.x < this.geometry.width / 2 || this.geometry.position.x > this.ctx.canvas.width - this.geometry.width/2){
         this.velocity.x *= -1
       }
-      if (this.geometry.position.y < this.geometry.height/2 || this.geometry.position.y > this.ctx.canvas.height - this.geometry.height/2){
+      if (this.geometry.position.y < this.geometry.height / 2 || this.geometry.position.y > this.ctx.canvas.height - this.geometry.height/2){
         this.velocity.y *= -1
       }
     } else {
-      if (this.geometry.position.x < -this.geometry.width/2){
+      if (this.geometry.position.x < -this.geometry.width / 2){
         this.geometry.position.x = this.ctx.canvas.width + this.geometry.width - Math.abs(this.geometry.position.x)
       } 
       if (this.geometry.position.x > this.ctx.canvas.width + this.geometry.width/2){
@@ -49,8 +51,6 @@ export default class Particle {
         this.geometry.position.y = this.geometry.position.y - this.ctx.canvas.height - this.geometry.height
       }
     }
-    this.velocity.limit(this.topspeed)
-    this.geometry.position.add(this.velocity)
   }
 
   display() {
