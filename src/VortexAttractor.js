@@ -5,20 +5,29 @@ export default class VortexAttractor extends Attractor {
     super(options)
     this.clockwise = options.clockwise || false
     this.threshold = options.threshold || 200
+    this.thresholdCached = {}
   }
 
-  attract(geometry){
-    var force = p5.Vector.sub(this.position, geometry.position)
+  _attract(particle, position, clockwise) {
+    let threshold = this.thresholdCached[particle.id] || this.threshold
+    threshold = threshold + (Math.random() - 0.5)
+    threshold = Math.max(Math.min(threshold, this.threshold + 20), this.threshold - 20)
+    this.thresholdCached[particle.id] = threshold
+    var force = p5.Vector.sub(position, particle.geometry.position)
     var ff = force.copy()
-    if(this.clockwise){
+    if(clockwise){
       ff.rotate(-Math.PI / 2)
     }else{
       ff.rotate(Math.PI / 2)
     }
-    force.setMag(force.mag() - this.threshold)
-    ff.setMag(this.threshold)
+    force.setMag(force.mag() - threshold)
+    ff.setMag(threshold)
     force.add(ff)
     return force
+  }
+
+  attract(particle){
+    return this._attract(particle, this.position, this.clockwise)
   }
 }
 

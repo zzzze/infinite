@@ -6,6 +6,7 @@ import Bubble from 'Bubble'
 import ParticleSystem from 'ParticleSystem'
 import Attractor from 'Attractor'
 import VortexAttractor from 'VortexAttractor'
+import InfiniteVortexAttractor from 'InfiniteVortexAttractor'
 var AttractPoint = require("./AttractPoint.js");
 var globalVar = require("./GlobalVar.js");
 var VisualObject = require("./VisualObject.js");
@@ -44,8 +45,10 @@ scene.setup = function (ctx) {
     const particleObject_2 = new ParticleObject({ geometry: geometry_2, ctx })
     ps_2.addParticle(particleObject_2)
   }
-  const attractPt = new VortexAttractor({
+  const attractPt = new InfiniteVortexAttractor({
     position: new p5.Vector(350, 350),
+    threshold: 80,
+    dis: 200,
     width: 30,
     height: 30,
     scene,

@@ -15,7 +15,7 @@ export default class ParticleSystem {
   updateParticle() {
     this._particleArray.forEach(particle => {
       this._attractorArray.forEach(attractor => {
-        particle.applyForce(attractor.geometry.attract(particle.geometry))
+        particle.applyForce(attractor.geometry.attract(particle))
       })
       particle.display()
     })

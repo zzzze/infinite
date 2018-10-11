@@ -1,7 +1,9 @@
 import Attractor from 'Attractor'
+import uuid from 'uuid'
 
 export default class Particle {
   constructor(options) {
+    this.id = uuid()
     this.geometry = options.geometry
     this.ctx = options.ctx
     this.rebound = false

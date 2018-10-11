@@ -33,7 +33,8 @@
     "@kapok/scene": "^0.1.1",
     "axios": "^0.18.0",
     "events": "^3.0.0",
-    "extract-text-webpack-plugin": "^1.0.1"
+    "extract-text-webpack-plugin": "^1.0.1",
+    "uuid": "^3.3.2"
   },
   "comment": {
     "test-min": "webpack --config webpack.min.js  //这是注释，备份"
